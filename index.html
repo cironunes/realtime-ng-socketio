@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Realtime com AngularJS e Socket.IO - Ciro Nunes</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/ciro.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body ng-app="ng-socketio">
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>Realtime</h1>
+					<h3>com AngularJS e Socket.IO</h3>
+					<p>
+						<small>By <a href="http://cironunes.github.com">Ciro Nunes</a> / <a href="http://twitter.com/cironunesdev">@cironunesdev</a></small>
+					</p>
+
+					<p>
+						<small>Acompalhe os slides em <a href="http://cironunes.realtime-presentation.jit.su">http://cironunes.realtime-presentation.jit.su</a></small>
+					</p>
+
+					<aside class="notes">
+						Descontrair antes de começar :)
+					</aside>
+				</section>
+
+				<section>
+					<section>
+						<h2>Agenda</h2>
+
+						<ul>
+							<li class="fragment roll-in">O que são apps realtime e como desenvolvê-las</li>
+							<li class="fragment roll-in">Porque estas tecnologias e uma breve introdução</li>
+							<li class="fragment roll-in"><strong>Hands On :)</strong></li>
+						</ul>
+					</section>
+
+					<section>
+						<img src="images/uuuh.gif" height="390" width="500" alt="">
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Oi, eu sou o Ciro!</h2>
+						<div>
+							<img src="images/eu.jpg" height="388" width="400" alt="">
+						</div>
+						<p>Front end Engineer, Agile Coach</p>
+					</section>
+
+					<section>
+						<a href="http://beta.kanui.com.br/"><img src="images/logo-kanui.jpg" height="307" width="400" alt=""></a>
+						<a href="http://rocket-internet.de"><img src="images/logo-rocket.jpg" height="307" width="400" alt=""></a>
+						<div>
+<!-- 							<p class="fragment grow">
+								<a href="mailto:ciro.nunes@kanui.com.br">Estamos contratando! Front end Developer (Pleno/Senior)</a>
+							</p>
+ -->						</div>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Aplicações realtime?</h2>
+
+						<div class="fragment roll-in">
+							<blockquote>
+								O servidor compartilha seu estado atual com todos os clientes conectados
+							</blockquote>
+						</div>
+
+						<aside class="notes">
+							Como definir tecnicamente o que são aplicações realtime?
+						</aside>
+					</section>
+
+					<section>
+						<h2>Tempo real (Globo Esporte)</h2>
+						<img src="images/temporeal.png" alt="">
+					</section>
+
+					<section>
+						<h2>AirMech</h2>
+						<a href="http://airmech.com/"><img src="images/airmech.jpg" alt=""></a>
+					</section>
+
+					<section>
+						<h2>Borbermine</h2>
+						<a href="http://bombermine.com/#/play"><img src="images/bombermine.jpg" alt=""></a>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>O que torna isso possível?</h2>
+					</section>
+
+					<section>
+						<h2>Web Sockets</h2>
+						<p class="fragment">Conexão persistente entre o browser e o servidor</p>
+						<p class="fragment"><a href="http://dev.w3.org/html5/websockets/#websocket">Especificação da W3C para a interface do WebSocket</a></p>
+					</section>
+
+					<section>
+						<img src="images/concepts-socket.jpg" alt="">
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>Socket.IO?</h1>
+
+						<blockquote class="fragment roll-in" cite="http://socket.io">O objetivo do Socket.IO é tornar aplicações realtime possíveis em qualquer browser e dispositivo móvel</blockquote>
+						<br>
+						<div class="fragment roll-in">
+							<p>Cross-browser Websocket</p>
+
+							<p>100% JavaScript</p>
+
+							<p>NodeJS</p>
+						</div>
+					</section>
+
+					<section>
+						<h2>Como usar <br><small>com o <a href="">Express</a></small></h2>
+					</section>
+
+					<section>
+						<h3>Configurando o Package.json</h3>
+
+						<pre><code contenteditable style="font-size: 18px; margin-top: 20px;">
+ {
+ 	"name": "Realtime app",
+ 	"description": "Awesome realtime with AngularJS and Socket.IO",
+ 	"version": "0.0.1",
+ 	"private": true,
+ 	"dependencies": {
+ 		"express": "3.x",
+ 		"socket.io": "0.9.x"
+ 	}
+ }
+						</code></pre>
+					</section>
+
+					<section>
+						<h3>Instalando as dependências</h3>
+						<pre><code contenteditable style="font-size: 18px; margin-top: 20px;">
+ $ npm install
+						</code></pre>
+					</section>
+
+					<section>
+						<h3>Servidor</h3>
+						<pre><code contenteditable style="font-size: 18px; margin-top: 20px;">
+ var express = require('express'),
+   app = express(),
+   server = require('http').createServer(app),
+   io = require('socket.io').listen(server);
+
+ app.configure(function() {
+   app.use(express.static(__dirname + '/public'));
+ });
+
+ io.sockets.on('connection', function (socket) {
+   socket.emit('news', { hello: 'world' });
+   socket.on('my other event', function (data) {
+     console.log(data);
+   });
+ });
+
+ server.listen(3000);
+						</code></pre>
+					</section>
+
+					<section>
+						<h3>Cliente</h3>
+						<pre><code contenteditable style="font-size: 18px; margin-top: 20px;">
+ var socket = io.connect();
+ socket.on('news', function (data) {
+   console.log(data);
+   socket.emit('my other event', { my: 'data' });
+ });
+						</code></pre>
+					</section>
+
+					<section>
+						<h3>Rodando a aplicação</h3>
+						<pre><code contenteditable style="font-size: 18px; margin-top: 20px;">
+ $ node app.js
+						</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1 class="shield"><img class="no-shadow" src="images/logo-angular.png" height="300" width="300" alt=""><span class="qmark">?</span></h1>
+					</section>
+
+					<section>
+						<h2>HTML para aplicações web!</h2>
+					</section>
+
+					<section>
+						<h2>Incríveis features</h2>
+						<p class="fragment">Modularização</p>
+						<p class="fragment">Data binding</p>
+						<p class="fragment">Dependency injection</p>
+						<p class="fragment">Testabilidade</p>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<div ng-controller="helloCtrl">
+							<h2>Hello, {{name}}</h2>
+							<p>Digite seu nome</p>
+							<input type="text" ng-model="newName">
+							<button ng-click="action()">OK</button>
+						</div>
+					</section>
+
+					<section ng-non-bindable>
+						<h2>View</h2>
+
+						<pre><code contenteditable style="font-size: 18px; margin-top: 20px;">
+ &lt;div ng-controller="HelloApp"&gt;
+   &lt;h1&gt;Hello, {{ name }}&lt;/h1&gt;
+   &lt;p&gt;Digite seu nome&lt;/p&gt;
+   &lt;input type="text" ng-model="newName"&gt;
+   &lt;button ng-click="action()"&gt;OK&lt;/button&gt;
+ &lt;/div&gt;
+						</code></pre>
+					</section>
+
+					<section ng-non-bindable>
+						<h2>Controller</h2>
+
+						<pre><code contenteditable style="font-size: 18px; margin-top: 20px;">
+ function HelloApp($scope) {
+   $scope.name = 'World';
+
+   $scope.action = function() {
+     $scope.name = $scope.newName;
+   }
+ }
+						</code></pre>
+					</section>
+
+					<section ng-non-bindable>
+						<h2>Testando</h2>
+
+						<pre><code class="javascript" contenteditable style="font-size: 18px; margin-top: 20px;">
+ it('should change the name on action', function() {
+   expect(scope.name).toBe('World');
+
+   scope.newName = 'FAKENAME';
+   scope.action();
+   expect(scope.name).toBe('FAKENAME');
+ });
+						</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<h2>Angular MVC</h2>
+
+					<img class="no-shadow" src="images/concepts-controller.png" height="316" width="463" alt="">
+				</section>
+<!-- 
+				<section>
+					<section>
+						<div ng-controller="searchCtrl">
+							<h2>Lista de pessoas</h2>
+							<p>Procure pela idade</p>
+							<input type="text" ng-model="searchText.age">
+							<br>
+							<br>
+							<table class="table">
+								<tr>
+									<th>Nome</th>
+									<th>Idade</th>
+								</tr>
+								<tr ng-repeat="item in items | filter:searchText">
+									<td>{{ item.name }}</td>
+									<td>{{ item.age }}</td>
+								</tr>
+							</table>
+						</div>
+					</section>
+
+					<section ng-non-bindable>
+						<h2>View</h2>
+
+						<pre><code class="javascript" contenteditable style="font-size: 18px; margin-top: 20px;">
+ &lt;div ng-controller="SearchCtrl"&gt;
+   &lt;h1&gt;Lista de pessoas&lt;/h1&gt;
+
+   &lt;p&gt;Procure pelo nome&lt;/p&gt;
+
+   &lt;input type="text" ng-model="searchText.age"&gt;
+
+   &lt;ul class="persons"&gt;
+     &lt;li ng-repeat="item in items | filter:searchText"&gt;
+     	{{ item.name }} - {{ item.age }}
+     &lt;/li&gt;
+   &lt;/ul&gt;
+ &lt;/div&gt;
+						</code></pre>
+					</section>
+
+					<section ng-non-bindable>
+						<h2>Controller</h2>
+
+						<pre><code class="javascript" contenteditable style="font-size: 18px; margin-top: 20px;">
+ function SearchCtrl($scope) {
+   $scope.items = [
+     {name: 'Ciro', age: 21},
+     {name: 'José', age: 69},
+     {name: 'Lara', age: 53},
+     {name: 'Markus', age: 39}
+   ];
+ }
+						</code></pre>
+					</section>
+
+					<section ng-non-bindable>
+						<h2>Testando</h2>
+
+						<pre><code class="javascript" contenteditable style="font-size: 18px; margin-top: 20px;">
+ expect(repeater('.persons li').count()).toBe(4);
+						</code></pre>
+					</section>
+				</section> -->
+
+				<section>
+					<section ng-controller="helloSocketCtrl">
+						<h2>Realtime Chat</h2>
+						<div id="chat-messages" style="overflow-y: scroll; height: 300px; border: 1px solid #e7e7e7; text-align: left; padding: 20px;">
+							<ul style="list-style: none; margin: 0;">
+								<li ng-repeat="message in messages" style="margin: 5px 0;">
+									<small>{{ message.time }}</small>
+									<strong>{{ message.username }}:</strong>
+									<span>{{ message.message }}</span>
+								</li>
+							</ul>
+						</div>
+						<form ng-submit="sendMessage()" style="margin-top: 20px;">
+							<input type="text" ng-model="name" placeholder="Nome" required>
+							<input class="message" type="text" ng-model="message" placeholder="Mensagem" required>
+							<button>Enviar!</button>
+						</form>
+					</section>
+
+					<section>
+						<h2>Realtime! :D</h2>
+						<img src="images/babaca.gif" width="400" alt="">
+					</section>
+
+					<section ng-non-bindable>
+						<h2>Servidor com Socket.IO</h2>
+
+						<pre><code contenteditable class="javascript" style="font-size: 18px; margin-top: 20px;">
+ io.sockets.on('connect', function(socket) {
+   socket.on('send:message', function(data) {
+    var d = (new Date()).toString(),
+	  time = d.match(/\d+:\d+/)[0];
+
+    // create new message
+    var message = {
+      username: data.username,
+      message: data.message,
+      time: time
+    };
+
+    // broadcast new data to connected clients
+    socket.broadcast.emit('send:message', message);
+   });
+});
+						</code></pre>
+					</section>
+
+					<section ng-non-bindable>
+						<h2>View</h2>
+						<pre><code class="html" contenteditable style="font-size: 18px; margin-top: 20px;">
+ &lt;div ng-controller="helloSocketCtrl"&gt;
+   &lt;h2&gt;Realtime Chat&lt;/h2&gt;
+   &lt;ul&gt;
+     &lt;li ng-repeat="message in messages"&gt;
+       &lt;small&gt;{{ message.time }}&lt;/small&gt;
+       &lt;strong&gt;{{ message.username }}:&lt;/strong&gt;
+       &lt;span&gt;{{ message.message }}&lt;/span&gt;
+     &lt;/li&gt;
+   &lt;/ul&gt;
+   &lt;form ng-submit="sendMessage()"&gt;
+     &lt;input type="text" ng-model="name" placeholder="Nome" required&gt;
+     &lt;input type="text" ng-model="message" placeholder="Mensagem" required&gt;
+     &lt;button&gt;Enviar!&lt;/button&gt;
+   &lt;/form&gt;
+ &lt;/div&gt;
+						</code></pre>
+					</section>
+
+					<section ng-non-bindable>
+						<h2>Socket service</h2>
+						<p>Encapsulando o Socket.IO em um serviço do AngularJS</p>
+						<pre><code contenteditable style="font-size: 18px; margin-top: 20px;">
+ var app = angular.module('myApp', []);
+
+ app.factory('socket', function($rootScope) {
+   var socket = io.connect();
+
+   return {
+     on: function(eventName, callback) {...},
+     emit: function(eventName, data, callback) {...}
+   }
+ });
+						</code></pre>
+					</section>
+
+					<section ng-non-bindable>
+						<h2>Usando o service "socket" no Controller</h2>
+
+						<pre><code class="javascript" contenteditable style="font-size: 18px; margin-top: 20px;">
+ app.controller('MainCtrl', function($scope, socket) {
+   // listen for server side socket.emit('send:message')
+   socket.on('send:message', function(message) {
+     // use AngularJS data binding to update the view with new data
+     $scope.messages.push(message);
+   });
+
+   $scope.messages = [];
+
+   $scope.sendMessage = function() {
+     var d = (new Date()).toString(),
+     	time = d.match(/\d+:\d+/)[0];
+
+     var message = {
+       username: $scope.userName,
+       message: $scope.message,
+       time: time
+     };
+
+     socket.emit('send:message', message);
+     $scope.messages.push(message);
+   }
+ });
+						</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<h2>Por onde começar?</h2>
+					<ul>
+						<li><a href="https://github.com/btford/angular-socket-io-seed/">Angular Socket.IO Seed</a></li>
+						<li><a href="https://github.com/btford/angular-express-seed/">Angular Express Seed</a></li>
+						<li><a href="https://github.com/angular/angular-seed/">Angular Seed</a></li>
+						<li><a href="http://yeoman.io/">Yeoman</a></li>
+					</ul>
+				</section>
+
+				<section>
+					<h1>Hands On!</h1>
+				</section>
+
+				<section>
+					<h2>Perguntas?</h2>
+				</section>
+
+				<section>
+					<section data-markdown>
+						<script type="text/template">
+							## Referências
+
+							- [HTML5 Rocks - Apresentando Websockets](http://www.html5rocks.com/pt/tutorials/websockets/basics/)
+							- [WHATWG - Spec](http://www.whatwg.org/specs/web-apps/current-work/multipage/network.html)
+							- [Socket.IO - Site](http://socket.io/)
+						</script>
+					</section>
+
+					<section data-markdown>
+						<script type="text/template">
+							## Referências
+
+							### AngularJS
+							- [AngularJS - Site](http://angularjs.org/)
+							- [AngularJS - Built with Angular](http://builtwith.angularjs.org/)
+							- [Nettuts - Why choose Angular for your next project](http://net.tutsplus.com/tutorials/javascript-ajax/3-reasons-to-choose-angularjs-for-your-next-project/)
+							- [Brian Ford - Angular and Socket.IO](http://briantford.com/blog/angular-socket-io.html)
+							- [Net Magazine - Collaboration board AngularJS + Socket.IO](http://www.netmagazine.com/tutorials/angularjs-collaboration-board-socketio?utm_source=javascriptweekly&utm_medium=email)
+						</script>
+					</section>
+				</section>
+
+				<section>
+					<h2>OBRIGADO! :)</h2>
+					<div><img src="images/joker.gif" width="400" alt=""></div>
+					<h3><a href="http://cironunes.github.com/">Ciro Nunes</a> / <a href="http://twitter.com/cironunesdev/">@cironunesdev</a></h3>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'concave', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+		<script src="js/angular.min.js"></script>
+		<script>
+			var app = angular.module('ng-socketio', []);
+
+			app.controller('helloCtrl', function($scope) {
+				$scope.name = 'World';
+
+				$scope.action = function() {
+					$scope.name = $scope.newName;
+				};
+			});
+
+			app.controller('searchCtrl', function($scope) {
+				$scope.items = [
+					{name: 'Ciro', age: 21},
+					{name: 'José', age: 69},
+					{name: 'Lara', age: 53},
+					{name: 'Markus', age: 39}
+				];
+			});
+
+			app.factory('socket', function($rootScope) {
+				var socket = io.connect();
+
+				return {
+					on: function(eventName, callback) {
+						socket.on(eventName, function() {
+							var args = arguments;
+
+							$rootScope.$apply(function() {
+								callback.apply(socket, args);
+							});
+						});
+					},
+
+					emit: function(eventName, data, callback) {
+						socket.emit(eventName, data, function() {
+							var args = arguments;
+
+							$rootScope.$apply(function() {
+								if(callback) {
+									callback.apply(socket, args);
+								}
+							});
+						});
+					}
+				};
+			});
+
+			app.controller('helloSocketCtrl', function($scope, socket) {
+				socket.on('send:message', function(data) {
+					$scope.messages.push(data);
+					$scope.scrollContainer();
+				});
+
+				$scope.messages = [];
+
+				$scope.scrollContainer = function() {
+					var $messages = document.getElementById('chat-messages');
+					setTimeout(function() {
+						$messages.scrollTop = $messages.scrollHeight;
+					}, 0);
+				};
+
+				$scope.sendMessage = function() {
+					var d = (new Date()).toString(),
+						time = d.match(/\d+:\d+/)[0];
+
+					var message = {
+						username: $scope.name,
+						message: $scope.message,
+       					time: time
+					};
+
+					socket.emit('send:message', message);
+
+					$scope.messages.push(message);
+					$scope.message = '';
+
+					document.getElementsByClassName('message')[0].focus();
+					$scope.scrollContainer();
+				}
+			});
+
+		</script>
+	</body>
+</html>

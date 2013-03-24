@@ -1,0 +1,82 @@
+/**
+ * Black theme for reveal.js.
+ * 
+ * Copyright (C) 2011-2012 Hakim El Hattab, http://hakim.se
+ */
+
+
+// Default mixins and settings -----------------
+@import "../template/mixins";
+@import "../template/settings";
+// ---------------------------------------------
+
+
+// Include theme-specific fonts
+@import url(http://fonts.googleapis.com/css?family=Montserrat:700);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic,700italic);
+
+
+// Override theme settings (see ../template/settings.scss)
+$backgroundColor: #f2f2f2;
+
+$mainFont: 'Open Sans', Times, 'Times New Roman', serif;
+$mainColor: #333;
+$mainFontSize: 30px;
+
+$linkColor: #FA6900;
+$linkColorHover: lighten( $linkColor, 20% );
+
+$headingColor: #333;
+$headingFont: 'Montserrat', Impact, sans-serif;
+$headingTextShadow: none;
+$headingLetterSpacing: -0.03em;
+$headingTextTransform: none;
+
+$selectionBackgroundColor: #fd840e;
+
+
+// Theme template ------------------------------
+@import "../template/theme";
+// ---------------------------------------------
+.reveal .progress {
+    height: 15px;
+}
+
+.shield span{
+    font-size: 200px;
+    vertical-align: 80px;
+}
+
+.reveal section .no-shadow {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    margin: 0;
+}
+
+input[type="text"] {
+    padding: 20px 10px;
+    font-size: 32px;
+    border-radius: 10px;
+    border: 1px solid #eee;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+}
+
+.reveal table {
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+.reveal table th {
+    font-weight: bold;
+}
+.reveal table td,
+.reveal table th {
+    border: 1px solid #CECBCB;
+    padding: 10px 40px;
+}
+
+button {
+    padding: 20px;
+    font-size: 26px;
+    font-weight: bold;
+}
