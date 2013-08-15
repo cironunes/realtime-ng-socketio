@@ -25,7 +25,7 @@ Then run:
 
 Now you can play with that in ```htp://localhost:1947```
 
-## Credits
+## Acknowledgements
 
 [@hakimel](http://twitter.com/hakimel), thank you for the awesome [RevealJS](http://lab.hakim.se/reveal-js/)
 
