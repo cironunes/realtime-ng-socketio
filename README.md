@@ -1,6 +1,6 @@
-# You're awesome!
+# Presentation about Realtime with AngularJS and SocketIO
 
-Thank you for come here!
+You're awesome! Thank you for come here.
 
 This is my talk, presented at:
 
