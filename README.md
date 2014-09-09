@@ -1,11 +1,11 @@
 # Presentation about Realtime with AngularJS and SocketIO
 
-You're awesome! Thank you for come here.
+You're awesome! Thank you for coming here.
 
 This is my talk, presented at:
 
 - [SampaJS 3](http://sampajs.com.br/pos/) - [Watch video](http://www.youtube.com/watch?v=5zcmBZ6mksM)
-- Corujão Caravana Web
+- Corujão Caravana Web - [Watch video](https://www.youtube.com/watch?v=_IbOxZnj-Qs)
 
 ## How to run
 
